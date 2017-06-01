@@ -47,8 +47,8 @@ class Handler extends ExceptionHandler {
   use JwtExceptionHandler;
 
   public function render($request, Exception $e) {
-    dd($e);
     if($e instanceof JwtException) return '';
-    return parent::render($request, $e);
+    //return parent::render($request, $e);
+    return response()->json(["error" => $e->getTraceAsString()]);
   }
 }

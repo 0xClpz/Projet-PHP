@@ -67,6 +67,11 @@ $app->singleton(
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
 
+
+$app->routeMiddleware([
+  'JWTMiddleWare' => App\Http\Middleware\JWTMiddleWare::class,
+]);
+
 /*
 |--------------------------------------------------------------------------
 | Register Service Providers

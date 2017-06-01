@@ -17,7 +17,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
       'sub' => $this->id,
       'exp' => time() + 7200,
       'context' => [
-        'email' => $this->email
+        'email' => $this->email,
+        'isAdmin' => $this->isAdmin
       ]
     ];
   }
