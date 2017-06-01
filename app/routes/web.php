@@ -11,6 +11,15 @@
 |
 */
 
+use App\User;
+
 $app->get('/', function () use ($app) {
-    return $app->version();
+  return $app->version();
 });
+
+$app->post('/auth/signup', 'UserController@signup');
+$app->post('/auth/login', 'UserController@login');
+
+
+$app->get('/user/{id}', 'UserController@show');
+$app->post('/user', 'UserController@create');

@@ -2,13 +2,14 @@
 
 namespace App;
 
+use GenTux\Jwt\JwtPayloadInterface;
 use Illuminate\Auth\Authenticatable;
 use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract {
+class User extends Model implements AuthenticatableContract, AuthorizableContract, JwtPayloadInterface {
   use Authenticatable, Authorizable;
 
   public function getPayload(){
@@ -16,10 +17,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
       'sub' => $this->id,
       'exp' => time() + 7200,
       'context' => [
-        'email' => $this->email,
-        'isAdmin' => $this->isAdmin,
-        'displayName' => $this->displayName,
-        'photoURL' => $this->photoURL
+        'email' => $this->email
       ]
     ];
   }
@@ -30,7 +28,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
    * @var array
    */
   protected $fillable = [
-    'displayName', 'email', 'photoURL', 'isAdmin'
+    'displayName', 'email', 'photoURL'
   ];
 
   /**
@@ -39,6 +37,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
    * @var array
    */
   protected $hidden = [
-    'password',
+    'password'
   ];
 }

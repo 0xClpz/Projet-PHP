@@ -13,7 +13,8 @@
     "laravel/lumen-framework": "5.4.*",
     "vlucas/phpdotenv": "~2.2",
     "tymon/jwt-auth": "^0.5.11",
-    "generationtux/jwt-artisan": "^0.1.8"
+    "generationtux/jwt-artisan": "^0.1.8",
+    "eddieantonio/bcrypt": "^0.3.3"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",
