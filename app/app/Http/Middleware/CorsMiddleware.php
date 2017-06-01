@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Borrowed from https://github.com/palanik/lumen-cors/blob/master/LumenCors.php
+ */
 namespace App\Http\Middleware;
 
 use Closure;
