@@ -20,17 +20,19 @@ $app->get('/', function () use ($app) {
 /**
  * Public ressources
  */
-$app->post('/auth/signup', 'UserController@signup');
-$app->post('/auth/login', 'UserController@login');
+$app->group(['middleware' => 'CorsMiddleware'], function() use($app){
+  $app->post('/auth/signup', 'UserController@signup');
+  $app->post('/auth/login', 'UserController@login');
 
+  $app->get('/users', 'UserController@getAll');
+  $app->get('/users/{id}', 'UserController@show');
 
-$app->get('/user/{id}', 'UserController@show');
+  $app->get('/dogs', 'DogController@getAll');
+  $app->get('/dogs/{id}', 'DogController@show');
 
-$app->get('/dogs', 'DogController@getAll');
-$app->get('/dogs/{id}', 'DogController@show');
-
-$app->get('/breeds', 'BreedController@getAll');
-$app->get('/breeds/{id}', 'BreedController@show');
+  $app->get('/breeds', 'BreedController@getAll');
+  $app->get('/breeds/{id}', 'BreedController@show');
+});
 
 /**
  * JWT protected ressources

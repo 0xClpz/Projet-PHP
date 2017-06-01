@@ -72,6 +72,10 @@ $app->routeMiddleware([
   'JWTMiddleWare' => App\Http\Middleware\JWTMiddleWare::class,
 ]);
 
+$app->routeMiddleware(([
+  'CorsMiddleware' => \App\Http\Middleware\CorsMiddleware::class,
+]));
+
 /*
 |--------------------------------------------------------------------------
 | Register Service Providers
