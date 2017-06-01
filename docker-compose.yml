@@ -29,6 +29,7 @@ php:
     DB_PASSWORD: secret
     MEMCACHED_HOST: cache
     CACHE_DRIVER: memcached
+    JWT_SECRET: 'yolo'
 db:
   image: mysql
   ports:

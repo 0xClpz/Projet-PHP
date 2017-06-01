@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Exception;
+use GenTux\Jwt\Exceptions\JwtException;
+use GenTux\Jwt\Exceptions\JwtExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -41,7 +43,12 @@ class Handler extends ExceptionHandler {
    * @param  \Exception $e
    * @return \Illuminate\Http\Response
    */
+
+  use JwtExceptionHandler;
+
   public function render($request, Exception $e) {
+    dd($e);
+    if($e instanceof JwtException) return '';
     return parent::render($request, $e);
   }
 }

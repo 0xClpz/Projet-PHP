@@ -5,19 +5,32 @@ namespace App\Http\Controllers;
 use App\User;
 use GenTux\Jwt\JwtToken;
 use Illuminate\Hashing\BcryptHasher;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 
 class UserController extends Controller {
 
-  private $jwt;
 
-  function __construct(JwtToken $jwt) {
-    $this->jwt = $jwt;
-  }
-
-  public function login(Request $request){
-
+  public function login(JwtToken $jwt, Request $request){
+    try {
+      $this->validate($request, [
+        'email' => 'required|email',
+        'password' => 'required'
+      ]);
+      $req = $request->json()->all();
+      $user = User::where('email', $request->json()->get('email'))->first();
+      //dd($user);
+      $password = $request->json()->get('password');
+      if (!Hash::check($password, $user->password)) {
+        return response()->json(['error' => 'Invalid credentials']);
+      }
+      // TODO: replace this shit with the env variable
+      $token = $jwt->createToken($user,"yolo");
+      return response()->json(['token' => $token]);
+    } catch (ValidationException $e){
+      return response()->json(['error' => 'Invalid user data']);
+    }
   }
 
   public function signup(JwtToken $jwt, Request $request){
@@ -32,8 +45,9 @@ class UserController extends Controller {
       $user = User::create($req);
       $password = (new BcryptHasher)->make($request->json()->get('password'));
       $user->password = $password;
-      //$user->save();
-      $token = $this->$jwt->createToken($user);
+      $user->save();
+      // TODO: Secret should be a env variable
+      $token = $jwt->createToken($user,"yolo");
       return response()->json(['token' => $token]);
     } catch (ValidationException $e){
       return response()->json(['error' => 'Invalid user data']);
@@ -41,6 +55,7 @@ class UserController extends Controller {
   }
 
   public function show($id) {
+    dd('lalalala');
     return $id;
   }
 

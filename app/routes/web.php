@@ -20,6 +20,9 @@ $app->get('/', function () use ($app) {
 $app->post('/auth/signup', 'UserController@signup');
 $app->post('/auth/login', 'UserController@login');
 
+//$app->get('/user/{id}', 'UserController@show');
 
-$app->get('/user/{id}', 'UserController@show');
-$app->post('/user', 'UserController@create');
+$app->group(['middleware' => 'jwt', 'namespace' => 'App\Http\Controllers'], function($app){
+  $app->get('/user/{id}', 'UserController@show');
+  $app->post('/user', 'UserController@create');
+});
