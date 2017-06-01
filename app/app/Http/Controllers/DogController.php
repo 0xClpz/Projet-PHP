@@ -18,13 +18,12 @@ class DogController extends Controller {
 
   public function show($id) {
     $dog = Dog::find($id);
-    return response()->json(["data" => $dog]);
+    return response()->json($dog);
   }
 
   public function getAll(){
-    dd();
     $dogs = Dog::all();
-    return response()->json(["data" => $dogs]);
+    return response()->json($dogs);
   }
 
   public function updateDog(JwtToken $jwt, Request $request, $id){
@@ -38,7 +37,7 @@ class DogController extends Controller {
     $dog->displayName = $request->json()->get('displayName');
     $dog->photoURL = $request->json()->get('photoURL');
     $dog->save();
-    return response()->json(["data" => $dog]);
+    return response()->json($dog);
   }
 
   public function deleteDog(JwtToken $jwt, Request $request, $id){
@@ -54,6 +53,7 @@ class DogController extends Controller {
   }
 
   public function create(Request $request) {
+    // TODO: Get the user Id from the token instead
     try {
       $this->validate($request, [
         'displayName' => 'required',
@@ -65,7 +65,7 @@ class DogController extends Controller {
       //dd($req);
       $dog = Dog::create($req);
       $dog->save();
-      return response()->json(["data" => $dog]);
+      return response()->json($dog);
     } catch(ValidationException $e){
       return response()->json(['error' => 'Invalid dog data']);
     }

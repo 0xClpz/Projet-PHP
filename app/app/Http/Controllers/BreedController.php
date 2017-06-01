@@ -19,12 +19,12 @@ class BreedController extends Controller {
 
   public function show($id) {
     $breed = Breed::find($id);
-    return response()->json(["data" => $breed]);
+    return response()->json($breed);
   }
 
   public function getAll(){
     $breed = Breed::all();
-    return response()->json(["data" => $breed]);
+    return response()->json($breed);
   }
 
   public function update(JwtToken $jwt, Request $request, $id){
@@ -37,7 +37,7 @@ class BreedController extends Controller {
     }
     $breed->name = $request->json()->get('name');
     $breed->save();
-    return response()->json(["data" => $breed]);
+    return response()->json($breed);
   }
 
   public function delete(JwtToken $jwt, Request $request, $id){
