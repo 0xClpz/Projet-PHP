@@ -8,7 +8,7 @@ import {backend_url} from "../constants/backend";
 import axios from "axios";
 import {connect} from "react-redux";
 
-const DogLine = ({data}) =>
+const DogLine = ({data, deleteDog}) =>
   <tr>
     <td><img width="50" src={data.photoURL}/></td>
     <td>
@@ -17,6 +17,7 @@ const DogLine = ({data}) =>
       </Link>
     </td>
     <td>{data.breed.name}</td>
+    <td><button className="btn" onClick={deleteDog}>Delete</button></td>
   </tr>;
 
 class _Dogs extends Component {
@@ -39,6 +40,10 @@ class _Dogs extends Component {
         return {options: res};
       })
       .catch(console.log);
+
+  deleteDog = (id) => {
+    this.props.makeRequest('delete', `/dogs/${id}`);
+  };
 
   addDog = () => {
     this.props.makeRequest('post', '/dogs', this.state);
@@ -80,10 +85,11 @@ class _Dogs extends Component {
               <th>Photo</th>
               <th>Nom</th>
               <th>Race</th>
+              <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            {data.map(dog => <DogLine key={dog.id} data={dog}/>)}
+            {data.map(dog => <DogLine deleteDog={() => this.deleteDog(dog.id)} key={dog.id} data={dog}/>)}
             </tbody>
           </table>
         </div>
