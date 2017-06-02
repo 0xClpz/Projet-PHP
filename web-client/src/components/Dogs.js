@@ -10,7 +10,7 @@ import {connect} from "react-redux";
 
 const shouldDisplayButton = (isAdmin, user_id, data) => data.user_id === user_id || isAdmin;
 
-const DogLine = ({isAdmin, user_id, data, deleteDog}) =>
+const DogLine = ({isAdmin, user_id, data, deleteDog, setEditMode}) =>
   <tr>
     <td><img width="50" src={data.photoURL}/></td>
     <td>
@@ -19,7 +19,11 @@ const DogLine = ({isAdmin, user_id, data, deleteDog}) =>
       </Link>
     </td>
     <td>{data.breed.name}</td>
-    <td>{shouldDisplayButton(isAdmin, user_id, data) ? <button className="btn" onClick={deleteDog}>Delete</button> : null}</td>
+    <td>{shouldDisplayButton(isAdmin, user_id, data) ?
+      <span>
+        <button className="btn" onClick={deleteDog}>Supprimer</button>
+        <button className="btn" onClick={setEditMode}>Editer</button>
+      </span>: null}</td>
   </tr>;
 
 class _Dogs extends Component {
@@ -27,6 +31,7 @@ class _Dogs extends Component {
     displayName: '',
     photoURL: '',
     user_id: this.props.user_id,
+    editMode: false,
   };
 
   getBreeds = () =>
@@ -55,6 +60,29 @@ class _Dogs extends Component {
     });
   };
 
+  setEditMode = id => {
+    const dog = this.props.data.find(dog => dog.id === id);
+    this.setState({
+      ...dog,
+      editMode: true
+    });
+  };
+
+  setNormalMode = () => {
+    this.setState({
+      displayName: '',
+      photoURL: '',
+      user_id: this.props.user_id,
+      editMode: false
+    });
+  };
+
+  update = () => {
+    console.log(this.state);
+    this.props.makeRequest('put', `/dogs/${this.state.id}`, this.state);
+    this.setNormalMode();
+  };
+
   render() {
     const {data} = this.props;
     return (
@@ -76,9 +104,18 @@ class _Dogs extends Component {
           loadOptions={this.getBreeds}
         />
         <div className="row">
-          <button onClick={this.addDog}
-                  className="btn">Ajouter
-          </button>
+          {
+            !this.state.editMode ?
+              <button onClick={this.addDog}
+                      className="btn">Ajouter
+              </button>
+              :
+              <button
+                className="btn"
+                onClick={this.update}>
+                Update
+              </button>
+          }
         </div>
         <div className="row">
           <table>
@@ -95,6 +132,7 @@ class _Dogs extends Component {
               <DogLine
                 user_id={this.props.user_id}
                 isAdmin={this.props.isAdmin}
+                setEditMode={() => this.setEditMode(dog.id)}
                 deleteDog={() => this.deleteDog(dog.id)}
                 key={dog.id}
                 data={dog}/>)}
