@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import {apiGET} from "../hoc/get";
+import {connect} from "react-redux";
 
-const BreedLine = ({data}) =>
+const BreedLine = ({data, isAdmin, deleteBreed}) =>
   <tr>
     <td>{data.id}</td>
     <td>{data.name}</td>
+    <td>{isAdmin ? <button onClick={deleteBreed} className="btn">Delete</button> : null}</td>
   </tr>;
 
 class _Breeds extends Component {
@@ -18,6 +20,10 @@ class _Breeds extends Component {
     this.setState({
       name: ''
     });
+  };
+
+  deleteBreed = (id) => {
+    this.props.makeRequest('delete', `/breeds/${id}`);
   };
 
   render(){
@@ -38,7 +44,12 @@ class _Breeds extends Component {
           </tr>
           </thead>
           <tbody>
-          {data.map(breed => <BreedLine key={breed.id} data={breed}/>)}
+          {data.map(breed =>
+            <BreedLine
+              isAdmin={this.props.isAdmin}
+              deleteBreed={() => this.deleteBreed(breed.id)}
+              key={breed.id}
+              data={breed}/>)}
           </tbody>
         </table>
       </div>
@@ -46,8 +57,6 @@ class _Breeds extends Component {
   }
 }
 
-const mapRequestsToProps = request => ({
-  create: name => request('post', '/breeds', {name})
-});
+const mapStateToProps = ({auth}) => ({...auth});
 
-export const Breeds = apiGET('/breeds')(_Breeds);
+export const Breeds = connect(mapStateToProps)(apiGET('/breeds')(_Breeds));
