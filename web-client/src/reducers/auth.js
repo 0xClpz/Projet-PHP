@@ -1,6 +1,6 @@
 import jwtDecode from 'jwt-decode';
 
-import {SUCCESSFUL_LOGIN} from "../constants/actions";
+import {LOG_OUT, SUCCESSFUL_LOGIN} from "../constants/actions";
 const initialState = {
   token: '',
   user_id: '',
@@ -23,11 +23,11 @@ const reducer = {
     token,
     isLoggedIn: true,
     ...getUserInfos(token)
-  })
+  }),
+  [LOG_OUT]: () => initialState
 };
 
 export const auth = (state = initialState, action) => {
   const handler = reducer[action.type];
-  const nextState =  handler ? handler(state, action.payload) : state;
-  return nextState;
+  return handler ? handler(state, action.payload) : state;
 };

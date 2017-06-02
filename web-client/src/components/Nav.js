@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from "react-redux";
 import {Link, NavLink} from "react-router-dom";
+import {logout} from "../actions/auth";
 
 const _Nav = props =>
   <nav>
@@ -13,11 +14,12 @@ const _Nav = props =>
         {!props.isLoggedIn ?
           <span>
             <li><NavLink to="/login">Se connecter</NavLink></li>
-            <li>< NavLink to="/signup"> S'inscrire</NavLink></li>
+            <li><NavLink to="/signup"> S'inscrire</NavLink></li>
           </span>
           :
           <span>
             <li><NavLink to={`users/${props.user_id}`}>Mon profil</NavLink></li>
+            <li><a onClick={props.logout}>Se déconnecter</a></li>
           </span>
         }
       </ul>
@@ -25,4 +27,9 @@ const _Nav = props =>
   </nav>;
 
 const mapStateToProps = ({auth}) => ({...auth});
-export const Nav = connect(mapStateToProps)(_Nav);
+
+const mapDispatchToProps = dispatch => ({
+  logout: () => dispatch(logout())
+});
+
+export const Nav = connect(mapStateToProps, mapDispatchToProps)(_Nav);
