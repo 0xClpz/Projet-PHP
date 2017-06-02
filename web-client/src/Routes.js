@@ -13,7 +13,7 @@ import {Breeds} from "./components/Breed";
 export const Routes = () =>
   <Switch>
     <AuthenticatedRoute exact path="/" component={Landing}/>
-    <AuthenticatedRoute path="/users" component={Users}/>
+    <AuthenticatedRoute exact path="/users" component={Users}/>
     <AuthenticatedRoute path="/users/:id" component={User}/>
     <AuthenticatedRoute path="/dogs" component={Dogs}/>
     <AuthenticatedRoute path="/breeds" component={Breeds}/>
