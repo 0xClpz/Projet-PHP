@@ -39,6 +39,7 @@ $app->group(['middleware' => 'JWTMiddleWare'], function() use($app){
   $app->get('/breeds/{id}', 'BreedController@show');
 
   $app->put('/users/{id}', 'UserController@update');
+  $app->delete('/users/{id}', 'UserController@delete');
 
   $app->post('/dogs', 'DogController@create');
   $app->put('/dogs/{id}', 'DogController@updateDog');

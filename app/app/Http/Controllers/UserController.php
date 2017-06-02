@@ -79,6 +79,21 @@ class UserController extends Controller {
      ->json($user);
   }
 
+  public function delete(JwtToken $jwt, Request $request, $id){
+    $payload = Utils::getPayload($jwt, $request);
+    $user = User::find($id);
+    if(!$this->selfOrAdmin($payload, $user)){
+      return response()
+        ->json(["error" => "Unauthorized action"]);
+    }
+    Dog::where('user_id', $user->id)->delete();
+    // dd('Still there');
+    $user->delete();
+    dd('dead');
+    return response()
+      ->json(["message" => "Profile deleted with success"]);
+  }
+
   public function show($id) {
     $user = User::find($id);
     $user->dogs;
