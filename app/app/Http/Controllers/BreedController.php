@@ -14,7 +14,7 @@ use Mockery\Exception;
 class BreedController extends Controller {
 
   public function isAdmin($payload){
-    return $payload->isAdmin;
+    return $payload['context']['isAdmin'];
   }
 
   public function show($id) {
@@ -43,11 +43,13 @@ class BreedController extends Controller {
   public function delete(JwtToken $jwt, Request $request, $id){
     $payload = Utils::getPayload($jwt, $request);
     $breed = Breed::find($id);
+    //dd($this->isAdmin($payload));
     if(!$this->isAdmin($payload)){
       return response()
         ->header('Status', '401')
         ->json(["error" => "Unauthorized action"]);
     }
+    Dog::where('breed_id', $id)->delete();
     $breed->delete();
     return response()->json(["message" => "Breed deleted with success"]);
   }
