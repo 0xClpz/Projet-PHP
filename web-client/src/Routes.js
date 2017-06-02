@@ -8,12 +8,13 @@ import {Dog} from "./components/Dog";
 import {Signup} from "./components/Signup";
 import {Login} from "./components/Login";
 import {AuthenticatedRoute} from "./hoc/AuthenticatedRoute";
+import {AdminRoute} from "./hoc/AdminRoute";
 import {Breeds} from "./components/Breed";
 
 export const Routes = () =>
   <Switch>
     <AuthenticatedRoute exact path="/" component={Landing}/>
-    <AuthenticatedRoute exact path="/users" component={Users}/>
+    <AdminRoute exact path="/users" component={Users}/>
     <AuthenticatedRoute path="/users/:id" component={User}/>
     <AuthenticatedRoute path="/dogs" component={Dogs}/>
     <AuthenticatedRoute path="/breeds" component={Breeds}/>

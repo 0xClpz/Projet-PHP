@@ -18,6 +18,10 @@ class UserController extends Controller {
     return $payload['context']['isAdmin'] || $payload['sub'] === $user->id;
   }
 
+  private function isAdmin($payload){
+    return $payload['context']['isAdmin'];
+  }
+
   public function login(JwtToken $jwt, Request $request) {
     try {
       $this->validate($request, [
@@ -44,9 +48,13 @@ class UserController extends Controller {
         'displayName' => 'required',
         'photoURL' => 'required'
       ]);
+      $password = $request->json()->get('password');
+      if(strlen($password) < 4){
+        return response()->json(['error' => 'Invalid user data']);
+      }
       $req = $request->json()->all();
       $user = User::create($req);
-      $password = (new BcryptHasher)->make($request->json()->get('password'));
+      $password = (new BcryptHasher)->make($password);
       $user->password = $password;
       $user->save();
       // TODO: Secret should be a env variable
@@ -90,7 +98,6 @@ class UserController extends Controller {
         ->json(["error" => "Unauthorized action"]);
     }
     Dog::where('user_id', $user->id)->delete();
-    // dd('Still there');
     $user->delete();
     dd('dead');
     return response()
@@ -103,7 +110,12 @@ class UserController extends Controller {
     return response()->json($user);
   }
 
-  public function getAll(){
+  public function getAll(Request $request, JwtToken $jwt){
+    $payload = Utils::getPayload($jwt, $request);
+    if(!$this->isAdmin($payload)){
+      return response()
+        ->json(["error" => "Unauthorized action"]);
+    }
     $users = User::all();
     return response()->json($users);
   }

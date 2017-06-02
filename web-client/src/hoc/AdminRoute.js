@@ -7,7 +7,7 @@ const mapStateToProps = ({auth: {isLoggedIn, isAdmin}}) => ({
   isLoggedIn, isAdmin
 });
 
-const _AdminRoute = ({component: Component, loggedIn, ...rest}) => (
+const _AdminRoute = ({component: Component, isLoggedIn, isAdmin, ...rest}) => (
   <Route
     {...rest}
     render={p =>
@@ -27,4 +27,4 @@ _AdminRoute.propTypes = {
   loggedIn: PropTypes.bool.isRequired
 };
 
-export const _AdminRoute = connect(mapStateToProps)(_AdminRoute);
+export const AdminRoute = connect(mapStateToProps)(_AdminRoute);
