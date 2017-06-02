@@ -19,6 +19,7 @@ export const apiGET = (url, initialData = []) => WrappedComponent =>
     }
 
     refresh = () => {
+      if(!url) return;
       const {token} = this.context.store.getState().auth;
       axios({
         method: 'get',
@@ -31,8 +32,7 @@ export const apiGET = (url, initialData = []) => WrappedComponent =>
         .catch(err => this.setState(err));
     };
 
-
-    makeRequest = (method, url, data) => {
+    makeRequest = (method, url, data, key) => {
       const {token} = this.context.store.getState().auth;
       axios({
         method,
@@ -42,7 +42,12 @@ export const apiGET = (url, initialData = []) => WrappedComponent =>
           'Content-Type': 'application/json',
           'Authorization': token,
         }
-      }).then(this.refresh)
+      }).then(({data}) => {
+        this.refresh();
+        if(key){
+          this.setState({[key]: data});
+        }
+      })
         .catch(err => this.setState({err}));
     };
 
