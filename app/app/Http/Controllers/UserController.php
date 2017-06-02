@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dog;
 use App\User;
 use GenTux\Jwt\JwtToken;
 use Illuminate\Hashing\BcryptHasher;
@@ -80,6 +81,7 @@ class UserController extends Controller {
 
   public function show($id) {
     $user = User::find($id);
+    $user->dogs;
     return response()->json($user);
   }
 

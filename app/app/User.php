@@ -23,6 +23,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
   }
 
+  public function dogs(){
+    return $this->hasMany('App\Dog');
+  }
+
   /**
    * The attributes that are mass assignable.
    *
