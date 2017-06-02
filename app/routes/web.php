@@ -22,16 +22,13 @@ $app->get('/', function () use ($app) {
  * We need those to be accessible WITHOUT a token
  * Otherwise users cant sign in nor log in ....
  */
-$app->group(['middleware' => 'CorsMiddleware'], function() use($app){
-  $app->post('/auth/signup', 'UserController@signup');
-  $app->post('/auth/login', 'UserController@login');
-});
+$app->post('/auth/signup', 'UserController@signup');
+$app->post('/auth/login', 'UserController@login');
 
 /**
  * Ressources protected by a token
  **/
-$app->group(['middleware' => ['JWTMiddleWare', 'CorsMiddleware']], function() use($app){
-
+$app->group(['middleware' => 'JWTMiddleWare'], function() use($app){
   $app->get('/users', 'UserController@getAll');
   $app->get('/users/{id}', 'UserController@show');
 

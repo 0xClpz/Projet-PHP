@@ -1,5 +1,7 @@
 <?php
 
+use App\Providers\CatchAllOptionsRequestsProvider;
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 try {
@@ -59,6 +61,10 @@ $app->singleton(
 |
 */
 
+$app->middleware([
+  \App\Http\Middleware\CorsMiddleware::class
+]);
+
 // $app->middleware([
 //    App\Http\Middleware\ExampleMiddleware::class
 // ]);
@@ -72,9 +78,6 @@ $app->routeMiddleware([
   'JWTMiddleWare' => App\Http\Middleware\JWTMiddleWare::class,
 ]);
 
-$app->routeMiddleware(([
-  'CorsMiddleware' => \App\Http\Middleware\CorsMiddleware::class,
-]));
 
 /*
 |--------------------------------------------------------------------------
@@ -87,6 +90,7 @@ $app->routeMiddleware(([
 |
 */
 
+$app->register(CatchAllOptionsRequestsProvider::class);
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(GenTux\Jwt\Support\LumenServiceProvider::class);
