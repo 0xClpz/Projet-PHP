@@ -85,22 +85,21 @@ class _Dogs extends Component {
   };
 
   render() {
-    let {data, location} = this.props;
-    const {breed_name, breed_id} = this.state;
+    let {data, location, user_id, isAdmin} = this.props;
+    const {breed_name, breed_id, displayName, photoURL, editMode} = this.state;
     if(location.query){
       data = data.filter(dog => dog.user_id === location.query.user_id);
     }
-    console.log(this.props);
     return (
       <div>
         <div className="row">
           <input onChange={event => this.setState({displayName: event.target.value})}
                  type="text"
-                 value={this.state.displayName}
+                 value={displayName}
                  placeholder="Nom du chien"/>
           <input onChange={event => this.setState({photoURL: event.target.value})}
                  type="text"
-                 value={this.state.photoURL}
+                 value={photoURL}
                  placeholder="Photo du chien"/>
         </div>
         <Select.Async
@@ -111,7 +110,7 @@ class _Dogs extends Component {
         />
         <div className="row">
           {
-            !this.state.editMode ?
+            !editMode ?
               <button onClick={this.addDog}
                       className="btn">Ajouter
               </button>
@@ -136,8 +135,8 @@ class _Dogs extends Component {
             <tbody>
             {data.map(dog =>
               <DogLine
-                user_id={this.props.user_id}
-                isAdmin={this.props.isAdmin}
+                user_id={user_id}
+                isAdmin={isAdmin}
                 setEditMode={() => this.setEditMode(dog.id)}
                 deleteDog={() => this.deleteDog(dog.id)}
                 key={dog.id}
