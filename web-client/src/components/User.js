@@ -5,7 +5,7 @@ import {logout} from "../actions/auth";
 import {connect} from "react-redux";
 
 const isAdminOrSelf = (user, id) =>
-  id === user.id || user.isAdmin;
+  id == user.id || user.isAdmin;
 
 class _User extends Component {
 
@@ -14,6 +14,8 @@ class _User extends Component {
     photoURL: '',
     email: '',
     editMode: false,
+    oldPassword: '',
+    password: ''
   };
 
   componentDidMount(){
@@ -70,7 +72,7 @@ class _User extends Component {
 
   render(){
     const {user, match: {params: {id}}} = this.props;
-    const {displayName, photoURL, email, editMode} = this.state;
+    const {displayName, photoURL, email, editMode, password, oldPassword} = this.state;
     if(!user) return null;
     const {dogs = []} = user;
     return (
@@ -78,9 +80,9 @@ class _User extends Component {
         {isAdminOrSelf(user, id)
         && this.getButton()}
         {user.isAdmin
-        && <button
+        ? <button
             onClick={this.resetPassword}
-            className="btn">Reset le password</button>}
+            className="btn">Reset le password</button> : null}
         <div className="card">
           <figure className="card-profile-image">
             <img
@@ -121,6 +123,30 @@ class _User extends Component {
                 </p>
               </div>
             </div>
+            {
+              editMode
+              &&
+                <div>
+                  <input
+                    placeholder="email"
+                    type="text"
+                    name="email"
+                    onChange={this.update}
+                    value={email}/>
+                  <input
+                    placeholder="Ancien password"
+                    type="password"
+                    name="oldPassword"
+                    onChange={this.update}
+                    value={oldPassword}/>
+                  <input
+                    placeholder="Nouveau password"
+                    type="password"
+                    name="password"
+                    onChange={this.update}
+                    value={password}/>
+                </div>
+            }
             <QueryLink
               to={{
                pathname: '/dogs',

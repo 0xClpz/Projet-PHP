@@ -65,11 +65,14 @@ class UserController extends Controller {
        ->json(["error" => "Unauthorized action"]);
    }
    $password = $request->json()->get('password');
+   $oldPassword = $request->json()->get('oldPassword');
    $displayName = $request->json()->get('displayName');
    $email = $request->json()->get('email');
 
-   if($password){
-     $user->password = (new BcryptHasher)->make($password);
+   if($password && $oldPassword){
+     if (Hash::check($oldPassword, $user->password)) {
+       $user->password = (new BcryptHasher)->make($password);
+     }
    }
 
    $user->displayName = Utils::Either($displayName, $user->displayName);
