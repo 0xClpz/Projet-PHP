@@ -18,11 +18,17 @@ class DogController extends Controller {
 
   public function show($id) {
     $dog = Dog::find($id);
+    $dog->breed;
+    $dog->user;
     return response()->json($dog);
   }
 
   public function getAll(){
     $dogs = Dog::all();
+    foreach ($dogs as $dog){
+      $dog->breed;
+      $dog->user;
+    }
     return response()->json($dogs);
   }
 

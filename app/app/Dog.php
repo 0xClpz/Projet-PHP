@@ -11,11 +11,14 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 class Dog extends Model implements AuthenticatableContract, AuthorizableContract {
   use Authenticatable, Authorizable;
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array
-   */
+  public function breed(){
+    return $this->belongsTo('App\Breed');
+  }
+
+  public function user(){
+    return $this->belongsTo('App\User');
+  }
+
   protected $fillable = [
     'displayName', 'photoURL', 'breed_id', 'user_id'
   ];
