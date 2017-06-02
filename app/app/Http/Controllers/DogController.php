@@ -13,7 +13,7 @@ use Mockery\Exception;
 class DogController extends Controller {
 
   public function isOwnerOrAdmin($payload, Dog $dog){
-    return $payload['context']['isAdmin'] || $dog->id === $payload['sub'];
+    return $payload['context']['isAdmin'] || $dog->user_id === $payload['sub'];
   }
 
   public function show($id) {
