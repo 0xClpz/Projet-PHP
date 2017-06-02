@@ -13,6 +13,10 @@ use App\Utils;
 
 class UserController extends Controller {
 
+  private function selfOrAdmin($payload, User $user){
+    return $payload['context']['isAdmin'] || $payload['sub'] === $user->id;
+  }
+
   public function login(JwtToken $jwt, Request $request) {
     try {
       $this->validate($request, [
@@ -39,6 +43,9 @@ class UserController extends Controller {
         'displayName' => 'required',
         'photoURL' => 'required'
       ]);
+      if(strlen($request->json()->get('password') < 4)){
+        return response()->json(['error' => 'Invalid user data']);
+      }
       $req = $request->json()->all();
       $user = User::create($req);
       $password = (new BcryptHasher)->make($request->json()->get('password'));
@@ -48,15 +55,40 @@ class UserController extends Controller {
       $token = $jwt->createToken($user);
       return response()->json(['token' => $token]);
     } catch (ValidationException $e) {
-      dd($e->getMessage());
       return response()->json(['error' => 'Invalid user data']);
     }
   }
 
-  public function show(JwtToken $jwt, Request $request, $id) {
-    dd(Utils::getPayload($jwt, $request));
+  public function update(JwtToken $jwt, Request $request, $id){
+   $user = User::find($id);
+   $payload = Utils::getPayload($jwt, $request);
+   if(!$this->selfOrAdmin($payload, $user)){
+     return response()
+       ->json(["error" => "Unauthorized action"]);
+   }
+   $password = $request->json()->get('password');
+   $displayName = $request->json()->get('displayName');
+   $email = $request->json()->get('email');
 
-    return $id;
+   if($password){
+     $user->password = (new BcryptHasher)->make($password);
+   }
+
+   $user->displayName = Utils::Either($displayName, $user->displayName);
+   $user->email = Utils::Either($email, $user->email);
+   $user->save();
+   return response()
+     ->json($user);
+  }
+
+  public function show($id) {
+    $user = User::find($id);
+    return response()->json($user);
+  }
+
+  public function getAll(){
+    $users = User::all();
+    return response()->json($users);
   }
 
   public function create(Request $request) {

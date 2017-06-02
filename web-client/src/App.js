@@ -1,19 +1,30 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {NavLink, Link, BrowserRouter as Router} from 'react-router-dom';
+import {Routes} from "./Routes";
+
+import './Routing.css';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+      <Router>
+        <div>
+          <nav>
+            <div className="nav-wrapper">
+              <Link to="/" className="brand-logo">Dogemon Go</Link>
+              <ul className="right hide-on-med-and-down">
+                <li><NavLink to="/dogs">Chiens</NavLink></li>
+                <li><NavLink to="/users">Utilisateurs</NavLink></li>
+                <li><NavLink to="/login">Se connecter</NavLink></li>
+                <li><NavLink to="/signup">S'inscrire</NavLink></li>
+              </ul>
+            </div>
+          </nav>
+          <div className="container">
+            <Routes />
+          </div>
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      </Router>
     );
   }
 }

@@ -13,7 +13,7 @@ use Mockery\Exception;
 class DogController extends Controller {
 
   public function isOwnerOrAdmin($payload, Dog $dog){
-    return $dog->user_id || $payload->isAdmin;
+    return $payload['context']['isAdmin'] || $dog->id === $payload['sub'];
   }
 
   public function show($id) {
@@ -26,6 +26,10 @@ class DogController extends Controller {
     return response()->json($dogs);
   }
 
+  /**
+   * Only the owner of the ressource and the admins are able
+   * to udpate said ressource
+   */
   public function updateDog(JwtToken $jwt, Request $request, $id){
     $payload = Utils::getPayload($jwt, $request);
     $dog = Dog::find($id);
@@ -52,18 +56,19 @@ class DogController extends Controller {
     return response()->json(["message" => "Dog deleted with success"]);
   }
 
-  public function create(Request $request) {
-    // TODO: Get the user Id from the token instead
+  public function create(JwtToken $jwt, Request $request) {
     try {
       $this->validate($request, [
         'displayName' => 'required',
         'photoURL' => 'required',
-        'breed_id' => 'required',
-        'user_id' => 'required'
+        'breed_id' => 'required'
       ]);
+      $payload = Utils::getPayload($jwt, $request);
+      $user_id = $payload['sub'];
       $req = $request->json()->all();
       //dd($req);
       $dog = Dog::create($req);
+      $dog->user_id = $user_id;
       $dog->save();
       return response()->json($dog);
     } catch(ValidationException $e){

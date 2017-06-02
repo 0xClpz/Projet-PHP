@@ -27,19 +27,19 @@ class BreedController extends Controller {
     return response()->json($breed);
   }
 
-  public function update(JwtToken $jwt, Request $request, $id){
-    $payload = Utils::getPayload($jwt, $request);
+  /*
+   * Anyone can update the breeds names
+   */
+  public function update(Request $request, $id){
     $breed = Breed::find($id);
-    if(!$this->isAdmin($payload)){
-      return response()
-        ->header('Status', '401')
-        ->json(["error" => "Unauthorized action"]);
-    }
     $breed->name = $request->json()->get('name');
     $breed->save();
     return response()->json($breed);
   }
 
+  /**
+   * Only allow admins to delete dog breeds
+   */
   public function delete(JwtToken $jwt, Request $request, $id){
     $payload = Utils::getPayload($jwt, $request);
     $breed = Breed::find($id);
