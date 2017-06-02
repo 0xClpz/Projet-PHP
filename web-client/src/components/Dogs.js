@@ -1,6 +1,12 @@
 import React, {Component} from 'react';
-import {apiGET} from "../hoc/get";
+import Select from 'react-select';
 import {Link, NavLink} from "react-router-dom";
+
+import {apiGET} from "../hoc/get";
+import 'react-select/dist/react-select.css';
+import {backend_url} from "../constants/backend";
+import axios from "axios";
+import {connect} from "react-redux";
 
 const DogLine = ({data}) =>
   <tr>
@@ -15,7 +21,31 @@ const DogLine = ({data}) =>
 
 class _Dogs extends Component {
   state = {
-    displayName: ''
+    displayName: '',
+    photoURL: '',
+    user_id: this.props.user_id,
+  };
+
+  getBreeds = () =>
+    axios({
+      url: `${backend_url}/breeds`,
+      headers: {
+        'Authorization': this.props.token,
+      }
+    }).then(({data}) => {
+        const res = data
+          .map(breed => ({value: breed.id, label: breed.name}));
+        console.log(res);
+        return {options: res};
+      })
+      .catch(console.log);
+
+  addDog = () => {
+    this.props.makeRequest('post', '/dogs', this.state);
+    this.setState({
+      displayName: '',
+      photoURL: '',
+    });
   };
 
   render() {
@@ -26,10 +56,20 @@ class _Dogs extends Component {
           <input onChange={event => this.setState({displayName: event.target.value})}
                  type="text"
                  value={this.state.displayName}
-                 placeholder="Ajouter un chien"/>
+                 placeholder="Nom du chien"/>
+          <input onChange={event => this.setState({photoURL: event.target.value})}
+                 type="text"
+                 value={this.state.photoURL}
+                 placeholder="Photo du chien"/>
         </div>
+        <Select.Async
+          name="breed_id"
+          value="one"
+          onChange={({value: breed_id}) => this.setState({breed_id})}
+          loadOptions={this.getBreeds}
+        />
         <div className="row">
-          <button onClick={this.addBreed}
+          <button onClick={this.addDog}
                   className="btn">Ajouter
           </button>
         </div>
@@ -48,8 +88,9 @@ class _Dogs extends Component {
           </table>
         </div>
       </div>
-        );
-        }
-        }
+    );
+  }
+}
 
-        export const Dogs = apiGET('/dogs')(_Dogs);
+const mapStateToProps = ({auth}) => ({...auth});
+export const Dogs = connect(mapStateToProps)(apiGET('/dogs')(_Dogs));
