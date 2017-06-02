@@ -46,6 +46,7 @@ class DogController extends Controller {
     }
     $dog->displayName = $request->json()->get('displayName');
     $dog->photoURL = $request->json()->get('photoURL');
+    $dog->breed_id = $request->json()->get('breed_id');
     $dog->save();
     return response()->json($dog);
   }
