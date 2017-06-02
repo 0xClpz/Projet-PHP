@@ -54,10 +54,11 @@ class _Breeds extends Component {
     const {data} = this.props;
     return (
       <div>
-        <input onChange={event => this.setState({name: event.target.value})}
-               type="text"
-               value={this.state.name}
-               placeholder="Ajouter une race"/>
+        <input
+          onChange={event => this.setState({name: event.target.value})}
+          type="text"
+          value={this.state.name}
+          placeholder="Ajouter une race"/>
         {
           !this.state.updateMode ?
             <button
