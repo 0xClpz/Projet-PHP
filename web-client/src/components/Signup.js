@@ -17,27 +17,30 @@ export const Signup = () =>
           <input
             name="email"
             placeholder="Adresse email"
-            type="text"
+            type="email"
             className="validate" />
         </div>
       </div>
       <div className="row">
         <div className="input-field col s12">
           <input
-            name="email"
-            placeholder="Adresse email"
-            type="text"
+            name="password"
+            placeholder="Mot de passe"
+            type="password"
             className="validate" />
         </div>
       </div>
       <div className="row">
         <div className="input-field col s12">
           <input
-            name="email"
-            placeholder="Adresse email"
-            type="text"
+            name="confirmPassword"
+            placeholder="Mot de passe"
+            type="password"
             className="validate" />
         </div>
+      </div>
+      <div className="row">
+        <button className="btn">S'inscrire</button>
       </div>
     </form>
   </div>;
