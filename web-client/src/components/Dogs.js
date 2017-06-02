@@ -86,6 +86,7 @@ class _Dogs extends Component {
 
   render() {
     let {data, location} = this.props;
+    const {breed_name, breed_id} = this.state;
     if(location.query){
       data = data.filter(dog => dog.user_id === location.query.user_id);
     }
@@ -104,8 +105,8 @@ class _Dogs extends Component {
         </div>
         <Select.Async
           name="breed_id"
-          value="one"
-          onChange={({value: breed_id}) => this.setState({breed_id})}
+          value={{value: breed_id, label: breed_name}}
+          onChange={({value: breed_id, label: breed_name}) => this.setState({breed_id, breed_name})}
           loadOptions={this.getBreeds}
         />
         <div className="row">
