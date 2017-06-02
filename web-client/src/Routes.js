@@ -6,6 +6,7 @@ import {Dogs} from "./components/Dogs";
 import {User} from "./components/User";
 import {Dog} from "./components/Dog";
 import {Signup} from "./components/Signup";
+import {Login} from "./components/Login";
 
 export const Routes = () =>
   <Switch>
@@ -15,5 +16,5 @@ export const Routes = () =>
     <Route path="/dogs" component={Dogs}/>
     <Route path="/dogs/:id" component={Dog}/>
     <Route path="/signup" component={Signup} />
-    <Route path="/login" component={Signup} />
+    <Route path="/login" component={Login} />
   </Switch>;
