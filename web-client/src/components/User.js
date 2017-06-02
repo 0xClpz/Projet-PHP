@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {apiGET} from "../hoc/get";
 import {connect} from "react-redux";
+import {Link} from "react-router-dom";
+import {QueryLink} from "./QueryLink";
 
 class _User extends Component {
 
@@ -39,7 +41,15 @@ class _User extends Component {
                 </p>
               </div>
             </div>
-            <button className="btn">Voir les chiens</button>
+            <QueryLink
+              to={{
+               pathname: '/dogs',
+                query: {
+                 user_id: user.id
+                }
+              }}>
+              <button className="btn">Voir les chiens</button>
+            </QueryLink>
           </div>
         </div>
       </div>

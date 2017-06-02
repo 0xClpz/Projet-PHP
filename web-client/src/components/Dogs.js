@@ -85,7 +85,11 @@ class _Dogs extends Component {
   };
 
   render() {
-    const {data} = this.props;
+    let {data, location} = this.props;
+    if(location.query){
+      data = data.filter(dog => dog.user_id === location.query.user_id);
+    }
+    console.log(this.props);
     return (
       <div>
         <div className="row">
