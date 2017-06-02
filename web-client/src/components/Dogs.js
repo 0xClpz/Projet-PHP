@@ -8,7 +8,9 @@ import {backend_url} from "../constants/backend";
 import axios from "axios";
 import {connect} from "react-redux";
 
-const DogLine = ({data, deleteDog}) =>
+const shouldDisplayButton = (isAdmin, user_id, data) => data.user_id === user_id || isAdmin;
+
+const DogLine = ({isAdmin, user_id, data, deleteDog}) =>
   <tr>
     <td><img width="50" src={data.photoURL}/></td>
     <td>
@@ -17,7 +19,7 @@ const DogLine = ({data, deleteDog}) =>
       </Link>
     </td>
     <td>{data.breed.name}</td>
-    <td><button className="btn" onClick={deleteDog}>Delete</button></td>
+    <td>{shouldDisplayButton(isAdmin, user_id, data) ? <button className="btn" onClick={deleteDog}>Delete</button> : null}</td>
   </tr>;
 
 class _Dogs extends Component {
@@ -89,7 +91,13 @@ class _Dogs extends Component {
             </tr>
             </thead>
             <tbody>
-            {data.map(dog => <DogLine deleteDog={() => this.deleteDog(dog.id)} key={dog.id} data={dog}/>)}
+            {data.map(dog =>
+              <DogLine
+                user_id={this.props.user_id}
+                isAdmin={this.props.isAdmin}
+                deleteDog={() => this.deleteDog(dog.id)}
+                key={dog.id}
+                data={dog}/>)}
             </tbody>
           </table>
         </div>
