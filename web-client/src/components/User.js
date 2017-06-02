@@ -32,13 +32,14 @@ class _User extends Component {
               </div>
               <div className="col s2 cent-align">
                 <h4 className="card-title grey-text text-darken-4">
-                  10
+                  {user.dogs.length}
                 </h4>
                 <p className="medium-small grey-text">
                   Chiens
                 </p>
               </div>
             </div>
+            <button className="btn">Voir les chiens</button>
           </div>
         </div>
       </div>
