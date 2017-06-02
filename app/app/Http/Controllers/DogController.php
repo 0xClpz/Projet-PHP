@@ -7,7 +7,6 @@ use App\Utils;
 use GenTux\Jwt\JwtToken;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
-use Mockery\Exception;
 
 
 class DogController extends Controller {
@@ -23,11 +22,24 @@ class DogController extends Controller {
     return response()->json($dog);
   }
 
-  public function getAll(){
-    $dogs = Dog::all();
+  public function getAll(Request $request){
+    $dogs = null;
+    $user_id = $request->input('user_id');
+    $breed_id = $request->input('breed_id');
+    if($user_id && $breed_id){
+      $dogs = Dog::where('user_id', $user_id)
+        ->where('breed_id', $breed_id)
+        ->get();
+    }
+    else if($user_id){
+      $dogs = Dog::where('user_id', $user_id)->get();
+    } else if ($breed_id){
+      $dogs = Dog::where('breed_id', $breed_id)->get();
+    } else {
+      $dogs = Dog::all();
+    }
     foreach ($dogs as $dog){
       $dog->breed;
-      $dog->user;
     }
     return response()->json($dogs);
   }
