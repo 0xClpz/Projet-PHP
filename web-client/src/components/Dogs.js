@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import Select from 'react-select';
-import {Link, NavLink} from "react-router-dom";
-
-import {apiGET} from "../hoc/get";
-import 'react-select/dist/react-select.css';
-import {backend_url} from "../constants/backend";
+import {Link} from "react-router-dom";
 import axios from "axios";
 import {connect} from "react-redux";
+
+import {apiGET} from "../hoc/get";
+import {backend_url} from "../constants/backend";
+
+import 'react-select/dist/react-select.css';
 
 const shouldDisplayButton = (isAdmin, user_id, data) => data.user_id === user_id || isAdmin;
 
