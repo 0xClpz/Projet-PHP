@@ -43,9 +43,6 @@ class UserController extends Controller {
         'displayName' => 'required',
         'photoURL' => 'required'
       ]);
-      if(strlen($request->json()->get('password') < 4)){
-        return response()->json(['error' => 'Invalid user data']);
-      }
       $req = $request->json()->all();
       $user = User::create($req);
       $password = (new BcryptHasher)->make($request->json()->get('password'));
