@@ -19,10 +19,18 @@ $app->get('/', function () use ($app) {
 
 /**
  * Public ressources
+ * We need those to be accessible WITHOUT a token
+ * Otherwise users cant sign in nor log in ....
  */
 $app->group(['middleware' => 'CorsMiddleware'], function() use($app){
   $app->post('/auth/signup', 'UserController@signup');
   $app->post('/auth/login', 'UserController@login');
+});
+
+/**
+ * Ressources protected by a token
+ **/
+$app->group(['middleware' => ['JWTMiddleWare', 'CorsMiddleware']], function() use($app){
 
   $app->get('/users', 'UserController@getAll');
   $app->get('/users/{id}', 'UserController@show');
@@ -32,12 +40,9 @@ $app->group(['middleware' => 'CorsMiddleware'], function() use($app){
 
   $app->get('/breeds', 'BreedController@getAll');
   $app->get('/breeds/{id}', 'BreedController@show');
-});
 
-/**
- * JWT protected ressources
- **/
-$app->group(['middleware' => 'JWTMiddleWare'], function() use($app){
+  $app->put('/users/{id}', 'UserController@update');
+
   $app->post('/dogs', 'DogController@create');
   $app->put('/dogs/{id}', 'DogController@updateDog');
   $app->delete('/dogs/{id}', 'DogController@deleteDog');
