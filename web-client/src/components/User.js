@@ -1,26 +1,99 @@
 import React, {Component} from 'react';
 import {apiGET} from "../hoc/get";
-import {connect} from "react-redux";
-import {Link} from "react-router-dom";
 import {QueryLink} from "./QueryLink";
+import {logout} from "../actions/auth";
+import {connect} from "react-redux";
+
+const isAdminOrSelf = (user, id) =>
+  id === user.id || user.isAdmin;
 
 class _User extends Component {
+
+  state = {
+    displayName: '',
+    photoURL: '',
+    email: '',
+    editMode: false,
+  };
 
   componentDidMount(){
     this.props.makeRequest('get', `/users/${this.props.match.params.id}`, null, 'user');
   }
 
+  resetPassword = () =>
+    [prompt('Reset le password')]
+      .map(password => {
+        this.props.makeRequest('put', `/users/${this.props.match.params.id}`, {password})
+      });
+
+  setEditMode = () => {
+    this.setState({
+      editMode: true,
+      ...this.props.user
+    });
+  };
+
+  deleteProfile = () => {
+    this.props.makeRequest('delete', `/users/${this.props.match.params.id}`);
+    if(this.props.match.params.id == this.props.user.id){
+      this.props.logout();
+    }
+    this.props.history.push('/');
+  };
+
+  setNormalMode = () => {
+    this.props.makeRequest('put', `/users/${this.props.match.params.id}`, this.state, 'user');
+    this.setState({
+      editMode: false,
+    });
+  };
+
+  update = ({target}) =>
+    this.setState({[target.name]: target.value});
+
+  getButton = () =>
+    !this.state.editMode ?
+      <span>
+        <button
+          onClick={this.setEditMode}
+          className="btn">Editer</button>
+        <button
+          className="btn"
+          onClick={this.deleteProfile}>
+          Supprimer (Action irréversible)
+        </button>
+      </span>
+      :
+      <button
+        onClick={this.setNormalMode}
+        className="btn">Sauvegarder</button>;
+
   render(){
-    const {user, isAdmin} = this.props;
+    const {user, match: {params: {id}}} = this.props;
+    const {displayName, photoURL, email, editMode} = this.state;
     if(!user) return null;
+    const {dogs = []} = user;
     return (
       <div className="section">
+        {isAdminOrSelf(user, id)
+        && this.getButton()}
+        {user.isAdmin
+        && <button
+            onClick={this.resetPassword}
+            className="btn">Reset le password</button>}
         <div className="card">
           <figure className="card-profile-image">
             <img
               className="circle z-depth-2 responsive-img activator"
               src={user.photoURL}
               alt="profile image"/>
+            {editMode
+            && <input
+              placeholder="Photo de profil"
+              type="text"
+              name="photoURL"
+              onChange={this.update}
+              value={photoURL}/>}
           </figure>
           <div className="card-content">
             <div className="row">
@@ -28,13 +101,20 @@ class _User extends Component {
                 <h4 className="card-title grey-text text-darken-4">
                   {user.displayName}
                 </h4>
+                {editMode
+                && <input
+                  placeholder="Photo de profil"
+                  type="text"
+                  name="displayName"
+                  onChange={this.update}
+                  value={displayName}/>}
                 <p className="medium-small grey-text">
                   {user.isAdmin ? 'Administrateur' : 'Utilisateur'}
                 </p>
               </div>
               <div className="col s2 cent-align">
                 <h4 className="card-title grey-text text-darken-4">
-                  {user.dogs.length}
+                  {dogs.length}
                 </h4>
                 <p className="medium-small grey-text">
                   Chiens
@@ -57,4 +137,8 @@ class _User extends Component {
   }
 }
 
-export const User = apiGET('/users')(_User);
+const mapDispatchToProps = dispatch => ({
+  logout: () => dispatch(logout())
+});
+
+export const User = connect(null, mapDispatchToProps)(apiGET('/users')(_User));
