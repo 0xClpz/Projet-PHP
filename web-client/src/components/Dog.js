@@ -7,4 +7,4 @@ const _Users = props =>
     Users page!
   </div>;
 
-export const Dog = apiGET('/users')(_Users);
+export const Dog = apiGET('/dog')(_Users);
