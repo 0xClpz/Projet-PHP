@@ -38,8 +38,16 @@ class _Breeds extends Component {
     });
   };
 
+  setNormalMode = () => {
+    this.setState({
+      name: '',
+      updateMode: false
+    });
+  };
+
   update = () => {
     this.props.makeRequest('put', `/breeds/${this.state.id}`, this.state);
+    this.setNormalMode();
   };
 
   render(){
