@@ -22,6 +22,7 @@ const _Nav = props =>
             <li><a onClick={props.logout}>Se déconnecter</a></li>
           </span>
         }
+        <li><a href='mailto:root@localhost.com'>Aide</a></li>
       </ul>
     </div>
   </nav>;

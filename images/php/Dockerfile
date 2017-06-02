@@ -11,3 +11,4 @@ RUN apt-get install -y git php5-memcached \
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php composer-setup.php --install-dir=/bin
 RUN php -r "unlink('composer-setup.php');"
+RUN mv /bin/composer.phar /bin/composer

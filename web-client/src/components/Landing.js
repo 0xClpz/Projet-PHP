@@ -6,7 +6,7 @@ const tasks = [
   {text: 'Modifier ses informations', done: true},
   {text: 'Ajouter/modifier/effacer des informations dans les 2 tables', done: true},
   {text: 'Supprimer mon compte et ses données', done: true},
-  {text: 'Communiquer avec l\'administrateur', done: false},
+  {text: 'Communiquer avec l\'administrateur', done: true},
   {text: 'En tant qu\'admin je peux éditer les clients', done: true},
   {text: 'Reset le password d\'un  utilisateur', done: true},
   {text: "Supprimer un client", done: true},
