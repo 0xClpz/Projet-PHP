@@ -5,7 +5,7 @@ import {logout} from "../actions/auth";
 import {connect} from "react-redux";
 
 const isAdminOrSelf = (user, id) =>
-  id == user.id || user.isAdmin;
+  id == user.user_id || user.isAdmin;
 
 class _User extends Component {
 
@@ -25,7 +25,7 @@ class _User extends Component {
   resetPassword = () =>
     [prompt('Reset le password')]
       .map(password => {
-        this.props.makeRequest('put', `/users/${this.props.match.params.id}`, {password})
+        this.props.makeRequest('put', `/reset/${this.props.match.params.id}`, {password})
       });
 
   setEditMode = () => {
@@ -71,15 +71,15 @@ class _User extends Component {
         className="btn">Sauvegarder</button>;
 
   render(){
-    const {user, match: {params: {id}}} = this.props;
+    const {user, match: {params: {id}}, loggedInUser, isAdmin} = this.props;
     const {displayName, photoURL, email, editMode, password, oldPassword} = this.state;
     if(!user) return null;
     const {dogs = []} = user;
     return (
       <div className="section">
-        {isAdminOrSelf(user, id)
+        {(isAdmin || id == user.id)
         && this.getButton()}
-        {user.isAdmin
+        {isAdmin
         ? <button
             onClick={this.resetPassword}
             className="btn">Reset le password</button> : null}
@@ -167,4 +167,6 @@ const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(logout())
 });
 
-export const User = connect(null, mapDispatchToProps)(apiGET('/users')(_User));
+const mapStateToProps = ({auth}) => auth;
+
+export const User = connect(mapStateToProps, mapDispatchToProps)(apiGET('/users')(_User));

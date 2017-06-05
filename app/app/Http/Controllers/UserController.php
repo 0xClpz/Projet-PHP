@@ -65,6 +65,20 @@ class UserController extends Controller {
     }
   }
 
+  public function resetPassword(JwtToken $jwt, Request $request, $id){
+    $user = User::find($id);
+    $payload = Utils::getPayload($jwt, $request);
+    if(!$this->isAdmin($payload)){
+      return response()
+        ->json(["error" => "Unauthorized action"]);
+    }
+    $password = $request->json()->get('password');
+    $user->password = (new BcryptHasher)->make($password);
+    $user->save();
+    return response()
+      ->json(["message" => "Password updated with success"]);
+  }
+
   public function update(JwtToken $jwt, Request $request, $id){
    $user = User::find($id);
    $payload = Utils::getPayload($jwt, $request);

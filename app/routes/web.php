@@ -38,6 +38,7 @@ $app->group(['middleware' => 'JWTMiddleWare'], function() use($app){
   $app->get('/breeds', 'BreedController@getAll');
   $app->get('/breeds/{id}', 'BreedController@show');
 
+  $app->put('/reset/{id}', 'UserController@resetPassword');
   $app->put('/users/{id}', 'UserController@update');
   $app->delete('/users/{id}', 'UserController@delete');
 
