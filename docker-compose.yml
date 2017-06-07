@@ -17,9 +17,9 @@ php:
   ports:
     - "9000:9000"
   environment:
+    APP_PATH: /var/www/html/database/migrations
     APP_ENV: local
     APP_DEBUG: 'true'
-    APP_KEY: SomeRandomKey!!!
     APP_LOCALE: en
     APP_FALLBACK_LOCALE: en
     DB_CONNECTION: mysql
@@ -41,3 +41,8 @@ db:
     MYSQL_PASSWORD: secret
 cache:
   image: memcached
+
+webclient:
+  build: web-client
+  ports:
+    - "3000:3000"
