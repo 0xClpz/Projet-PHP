@@ -13,3 +13,9 @@ Connexion à la db disponible sur:
 - 127.0.0.1:3306
 - user: lumen
 - password: secret
+- database: lumen
+
+Créer un utilisateur administrateur:
+- Créer un compte avec l'email root@localhost.com
+- Ouvrir la database dans l'app de votre choix`
+- Dans la table Users, changer le isAdmin de l'utilisateur de 0 à 1
