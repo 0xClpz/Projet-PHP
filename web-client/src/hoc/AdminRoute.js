@@ -24,7 +24,7 @@ const _AdminRoute = ({component: Component, isLoggedIn, isAdmin, ...rest}) => (
 
 _AdminRoute.propTypes = {
   component: PropTypes.func.isRequired,
-  loggedIn: PropTypes.bool.isRequired
+  loggedIn: PropTypes.bool
 };
 
 export const AdminRoute = connect(mapStateToProps)(_AdminRoute);

@@ -31,8 +31,8 @@ export const Landing = () =>
       </thead>
 
       <tbody>
-      {tasks.map(task =>
-        <tr>
+      {tasks.map((task, i) =>
+        <tr key={i}>
           <td>{task.text}</td>
           <td>{task.done ? '✅':'❌'}</td>
         </tr>

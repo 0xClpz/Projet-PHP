@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {NavLink, Link, BrowserRouter as Router} from 'react-router-dom';
+import {BrowserRouter as Router} from 'react-router-dom';
 import {Routes} from "./Routes";
 
 import './Routing.css';

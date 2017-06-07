@@ -18,7 +18,7 @@ const _Nav = props =>
           </span>
           :
           <span>
-            <li><NavLink to={`users/${props.user_id}`}>Mon profil</NavLink></li>
+            <li><NavLink to={`/users/${props.user_id}`}>Mon profil</NavLink></li>
             <li><a onClick={props.logout}>Se déconnecter</a></li>
           </span>
         }

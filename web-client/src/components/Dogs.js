@@ -13,7 +13,7 @@ const shouldDisplayButton = (isAdmin, user_id, data) => data.user_id === user_id
 
 const DogLine = ({isAdmin, user_id, data, deleteDog, setEditMode}) =>
   <tr>
-    <td><img width="50" src={data.photoURL}/></td>
+    <td><img alt="Dog" width="50" src={data.photoURL}/></td>
     <td>
       <Link to={`/dogs/${data.id}`}>{
         data.displayName}
